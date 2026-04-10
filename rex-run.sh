@@ -1,3 +1,3 @@
 #!/bin/bash
 
-cd build/linux && ../../scripts/q-script/yifei-q
+meson compile -C build && cd build/linux && ../../scripts/q-script/yifei-q
