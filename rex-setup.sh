@@ -338,12 +338,12 @@ for RC in "$REAL_HOME/.bashrc" "$REAL_HOME/.profile"; do
 done
 
 # Set the Rust to nightly version
-info "Setup Rust tool"
-rustup toolchain install nightly --profile minimal
-rustup default nightly
-rustup component add rust-src --toolchain nightly
-rustup component add clippy
-cargo install bindgen-cli --version 0.72.1 --locked --force
+# info "Setup Rust tool"
+# rustup toolchain install nightly --profile minimal
+# rustup default nightly
+# rustup component add rust-src --toolchain nightly
+# rustup component add clippy
+# cargo install bindgen-cli --version 0.72.1 --locked --force
 
 # ── 10. Sanity checks ─────────────────────────────────────────────────────────
 for cmd in cmake eu-strip pahole qemu-system-x86_64; do
