@@ -68,7 +68,19 @@ sanity_test = custom_target(
   ]
 )
 
-runtest_deps += [sensor_build, sensor_loader, sensor_trigger, sanity_test]
+# Custom target
+sensor_ko = custom_target(
+  'rex_test_ko',
+  output: ['rex_test.ko'],
+  command: [
+    'sh', '-c',
+    'make -C ' + kbuild_dir + ' LLVM=1 M=' + meson.current_source_dir() + ' modules && cp ' + meson.current_source_dir() + '/rex_test.ko @OUTPUT@'
+  ],
+  console: false,
+  build_by_default: true
+)
+
+runtest_deps += [sensor_build, sensor_loader, sensor_trigger, sanity_test, sensor_ko]
 
 sanity_test_env = environment()
 sanity_test_env.set('SAMPLE_PATH', meson.current_build_dir())

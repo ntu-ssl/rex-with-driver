@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#define DEVICE "/dev/zero"
+#define DEVICE "/dev/rex_test"
 
 /*
  * event-trigger — exercises all three Rex sensor-device hooks:

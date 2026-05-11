@@ -1,0 +1,1 @@
+savedcmd_Module.symvers :=  /home/mtmatt/rex-with-driver/build/linux/scripts/mod/modpost -M -m -b   -E     -o Module.symvers -T modules.order -i /home/mtmatt/rex-with-driver/build/linux/Module.symvers -e 

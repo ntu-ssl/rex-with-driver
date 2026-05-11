@@ -6,6 +6,8 @@ from time import sleep
 
 process = 0
 
+# Add kernel module into vm
+sanity_test_env.set('KO_PATH', meson.current_source_dir())
 
 def count_bpf_programs():
     try:

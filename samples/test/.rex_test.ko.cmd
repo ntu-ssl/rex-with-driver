@@ -1,0 +1,1 @@
+savedcmd_rex_test.ko := ld.lld -r -m elf_x86_64 -mllvm -import-instr-limit=5 -z noexecstack --build-id=sha1  -T /home/mtmatt/rex-with-driver/build/linux/scripts/module.lds -o rex_test.ko rex_test.o rex_test.mod.o .module-common.o

@@ -21,3 +21,14 @@ root@q:~/rex-with-driver/build/samples/test# ./event-trigger
 
    event-trigger-401     [001] ....1    26.root@q:~/rex-with-driver/build/samples/test# 146377: bpf_trace_printk: [test::rex_sensor_write] vfs_write on target device, pid=401
 ```
+
+## Test flow
+
+```
+cp ~/rex-with-driver/samples/test/rex_test.ko \
+   ~/rex-with-driver/build/samples/test/rex_test.ko
+```
+
+```
+insmod rex_test.ko
+```
