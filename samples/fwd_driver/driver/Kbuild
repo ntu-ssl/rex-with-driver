@@ -1,0 +1,2 @@
+obj-m := rex_fwd.o
+rex_fwd-y := rex_fwd_main.o
