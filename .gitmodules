@@ -1,6 +1,6 @@
 [submodule "linux"]
 	path = linux
-	url = git@github.com:rex-rs/linux.git
+	url = git@github.com:ntu-ssl/linux-rex-kernel.git
 	branch = rex-linux
 [submodule "rust"]
 	path = rust
