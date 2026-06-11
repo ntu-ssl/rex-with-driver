@@ -1,0 +1,2 @@
+obj-m := rex_recover.o
+rex_recover-y := rex_recover_main.o rex_recover_shim.o
