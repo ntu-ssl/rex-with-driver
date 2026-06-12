@@ -1,0 +1,2 @@
+obj-m := rex_net.o
+rex_net-y := rex_net_main.o rex_net_glue.o
