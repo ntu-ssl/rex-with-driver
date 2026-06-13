@@ -7,15 +7,23 @@ function, `net_driver` does the same for the **network transmit datapath**:
 every packet a virtual Ethernet interface sends is forwarded to a hookable
 function that a loaded Rex eBPF extension can monitor and override.
 
+The driver registers a **cross-connected pair** `rexnet0` ⟷ `rexnet1`
+(veth-style): on a PASS verdict the packet is delivered to the peer's receive
+path via `dev_forward_skb`, so real protocols (ARP, ICMP, TCP/HTTP, …) work
+across the pair — put one end in a network namespace and run an actual server
+behind the hook (see `integration_test.sh`).
+
 ## Components
 
 | File | Role |
 |------|------|
-| `driver/rex_net_main.rs` | Rust kernel module. Registers the `rexnet0` virtual Ethernet device, owns the transmit logic and the `rex_net_dispatch` hook point. |
+| `driver/rex_net_main.rs` | Rust kernel module. Registers the `rexnet0` ⟷ `rexnet1` pair, owns the transmit/forwarding logic and the `rex_net_dispatch` hook point. |
 | `driver/rex_net_glue.c` | Tiny C ABI shim for the `ndo_*` callbacks (see *kCFI* below). |
 | `src/main.rs` | Rex extension. Kprobes `rex_net_dispatch`; counts packets, and drops ARP via `bpf_override_return`. |
-| `loader.c` | Loads/attaches the extension and streams its trace output. |
+| `loader.c` | Loads/attaches the extension and streams its trace output (`--quiet` disables per-packet logging for benchmarks). |
 | `guest_test.sh` / `tests/runtest.py` | End-to-end in-VM test. |
+| `integration_test.sh` | In-VM integration test/benchmark: Apache httpd + ab + iperf3 over the pair, extension on/off. Results: [docs/benchmarks/net-driver-integration.md](../../docs/benchmarks/net-driver-integration.md). |
+| `bench.sh` / `bench_report.py` | In-VM pktgen TX microbenchmark. Results: [docs/benchmarks/net-driver-tx.md](../../docs/benchmarks/net-driver-tx.md). |
 
 ## Dispatch protocol
 

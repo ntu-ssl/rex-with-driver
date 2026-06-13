@@ -44,6 +44,14 @@ extra packets are stray interface traffic).
   Re-run with `scripts/q-script/nix-q` on a KVM-capable setup for
   publishable absolute numbers; the scripts need no changes.
 
+> **Note (2026-06-13):** these numbers were measured when the driver consumed
+> every TX packet (single `rexnet0`, no RX side). The driver has since become
+> a cross-connected pair (`rexnet0` ⟷ `rexnet1`, see
+> [net-driver-integration.md](net-driver-integration.md)); with the peer down
+> — as in this benchmark setup — `dev_forward_skb` frees the packet almost as
+> early as `consume_skb` did, so the comparison remains representative, but a
+> re-run would include one extra branch + peer lookup per packet.
+
 ## Results (2026-06-13)
 
 | Configuration | Pkt size | ns/packet (mean ± stdev) | kpps (mean) |
