@@ -1,0 +1,2 @@
+obj-m := rex_baseline.o
+rex_baseline-y := rex_baseline_main.o

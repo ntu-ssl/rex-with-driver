@@ -1,0 +1,63 @@
+==== net_driver TX benchmark ====
+INFO kernel=6.19.0-rex+ cpus=4 count=50000 trials=5 sizes='64 1500'
+==== BENCH 1: dummy0 (stock baseline, no Rex) ====
+RESULT tag=dummy0 size=64 trial=1 usec=28089 count=50000
+RESULT tag=dummy0 size=64 trial=2 usec=21443 count=50000
+RESULT tag=dummy0 size=64 trial=3 usec=27926 count=50000
+RESULT tag=dummy0 size=64 trial=4 usec=29881 count=50000
+RESULT tag=dummy0 size=64 trial=5 usec=30049 count=50000
+RESULT tag=dummy0 size=1500 trial=1 usec=18665 count=50000
+RESULT tag=dummy0 size=1500 trial=2 usec=32026 count=50000
+RESULT tag=dummy0 size=1500 trial=3 usec=23926 count=50000
+RESULT tag=dummy0 size=1500 trial=4 usec=24780 count=50000
+RESULT tag=dummy0 size=1500 trial=5 usec=17309 count=50000
+==== BENCH 2: rexnet0, hook point present, no extension ====
+RESULT tag=rexnet0-noext size=64 trial=1 usec=41941 count=50000
+RESULT tag=rexnet0-noext size=64 trial=2 usec=34304 count=50000
+RESULT tag=rexnet0-noext size=64 trial=3 usec=37513 count=50000
+RESULT tag=rexnet0-noext size=64 trial=4 usec=37695 count=50000
+RESULT tag=rexnet0-noext size=64 trial=5 usec=20567 count=50000
+RESULT tag=rexnet0-noext size=1500 trial=1 usec=37512 count=50000
+RESULT tag=rexnet0-noext size=1500 trial=2 usec=40798 count=50000
+RESULT tag=rexnet0-noext size=1500 trial=3 usec=36640 count=50000
+RESULT tag=rexnet0-noext size=1500 trial=4 usec=25643 count=50000
+RESULT tag=rexnet0-noext size=1500 trial=5 usec=44618 count=50000
+==== BENCH 3: rexnet0, Rex extension attached (int3 kprobe, override) ====
+RESULT tag=rexnet0-rex-int3 size=64 trial=1 usec=87980 count=50000
+RESULT tag=rexnet0-rex-int3 size=64 trial=2 usec=92424 count=50000
+RESULT tag=rexnet0-rex-int3 size=64 trial=3 usec=95454 count=50000
+RESULT tag=rexnet0-rex-int3 size=64 trial=4 usec=83497 count=50000
+RESULT tag=rexnet0-rex-int3 size=64 trial=5 usec=101567 count=50000
+RESULT tag=rexnet0-rex-int3 size=1500 trial=1 usec=94603 count=50000
+RESULT tag=rexnet0-rex-int3 size=1500 trial=2 usec=89441 count=50000
+RESULT tag=rexnet0-rex-int3 size=1500 trial=3 usec=87049 count=50000
+RESULT tag=rexnet0-rex-int3 size=1500 trial=4 usec=93010 count=50000
+RESULT tag=rexnet0-rex-int3 size=1500 trial=5 usec=90234 count=50000
+[loader] quiet (benchmark) mode
+STAT_total=500001
+STAT_bytes=391000070
+STAT_passed=500001
+STAT_dropped=0
+STAT_arp=0
+STAT_ipv4=500000
+==== BENCH 4: rexnet0, Rex extension, jump-optimized kprobe (monitor only) ====
+RESULT tag=rexnet0-rex-optprobe size=64 trial=1 usec=50387 count=50000
+RESULT tag=rexnet0-rex-optprobe size=64 trial=2 usec=64456 count=50000
+RESULT tag=rexnet0-rex-optprobe size=64 trial=3 usec=53613 count=50000
+RESULT tag=rexnet0-rex-optprobe size=64 trial=4 usec=62734 count=50000
+RESULT tag=rexnet0-rex-optprobe size=64 trial=5 usec=60745 count=50000
+RESULT tag=rexnet0-rex-optprobe size=1500 trial=1 usec=53810 count=50000
+RESULT tag=rexnet0-rex-optprobe size=1500 trial=2 usec=61878 count=50000
+RESULT tag=rexnet0-rex-optprobe size=1500 trial=3 usec=61129 count=50000
+RESULT tag=rexnet0-rex-optprobe size=1500 trial=4 usec=60325 count=50000
+RESULT tag=rexnet0-rex-optprobe size=1500 trial=5 usec=59585 count=50000
+[loader] quiet (benchmark) mode
+STAT_total=500001
+STAT_bytes=391000070
+STAT_passed=500001
+STAT_dropped=0
+STAT_arp=0
+STAT_ipv4=500000
+==== driver counters ====
+tx_pass=1500008 tx_drop=0
+BENCH_DONE

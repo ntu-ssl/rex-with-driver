@@ -1,0 +1,2 @@
+obj-m := rex_guarded.o
+rex_guarded-y := rex_guarded_main.o

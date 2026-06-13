@@ -1,0 +1,44 @@
+==== net_driver integration test (Apache/HTTP over rexnet pair) ====
+INFO kernel=6.19.0-rex+ cpus=4 trials=3 ab_n=10000 ab_c=8 iperf_t=10s
+INFO httpd=/nix/store/4frm0bxxg3h62dx0dr35v9h72g0qm9cs-apache-httpd-2.4.68/bin/httpd
+INFO iperf3=/nix/store/mi07gmq86rsynj8k4rx1310xm01b32b0-iperf-3.21/bin/iperf3
+INFO rexnet0=e2:33:54:24:ae:8b rexnet1=f2:bd:b3:3e:0a:2b
+==== PHASE A: functional, no Rex extension ====
+OK A-ping: ARP + ICMP across the pair
+OK A-http: GET index.html content matches
+OK A-http-blob: 64KiB body intact
+==== PHASE B: functional, Rex extension attached ====
+OK B-arp-drop: ARP dropped by extension, ping cannot resolve
+OK B-ping-static: ICMP passes with static neigh
+OK B-http: HTTP works with extension attached (IPv4 PASS)
+---- extension counters after phase B ----
+STAT_total=23
+STAT_bytes=2016
+STAT_passed=19
+STAT_dropped=4
+STAT_arp=4
+STAT_ipv4=18
+==== PHASE C1: benchmark, no extension ====
+RESULT bench=ab cfg=noext trial=1 rps=4835.25 n=10000 c=8
+RESULT bench=ab cfg=noext trial=2 rps=4895.48 n=10000 c=8
+RESULT bench=ab cfg=noext trial=3 rps=4786.29 n=10000 c=8
+RESULT bench=iperf3 cfg=noext trial=1 bps=1371675608 t=10
+RESULT bench=iperf3 cfg=noext trial=2 bps=1369545314 t=10
+RESULT bench=iperf3 cfg=noext trial=3 bps=1346354502 t=10
+==== PHASE C2: benchmark, Rex extension (int3 kprobe, override) ====
+RESULT bench=ab cfg=rex-int3 trial=1 rps=4778.05 n=10000 c=8
+RESULT bench=ab cfg=rex-int3 trial=2 rps=4806.34 n=10000 c=8
+RESULT bench=ab cfg=rex-int3 trial=3 rps=4808.53 n=10000 c=8
+RESULT bench=iperf3 cfg=rex-int3 trial=1 bps=1179643230 t=10
+RESULT bench=iperf3 cfg=rex-int3 trial=2 bps=1079630469 t=10
+RESULT bench=iperf3 cfg=rex-int3 trial=3 bps=1220562049 t=10
+---- extension counters after phase C2 ----
+STAT_total=3175428
+STAT_bytes=4573083577
+STAT_passed=3175457
+STAT_dropped=0
+STAT_arp=0
+STAT_ipv4=3175471
+---- driver counters ----
+tx_pass=6889423 tx_drop=4
+INTEGRATION_DONE
