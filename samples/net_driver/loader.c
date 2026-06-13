@@ -19,6 +19,7 @@ enum {
 	STAT_DROPPED = 3,
 	STAT_ARP = 4,
 	STAT_IPV4 = 5,
+	CFG_QUIET = 6,
 	STAT_SLOTS = 8,
 };
 
@@ -58,12 +59,13 @@ static void on_term(int sig)
 	g_stop = 1;
 }
 
-int main(void)
+int main(int argc, char **argv)
 {
 	struct bpf_object *obj;
 	struct bpf_program *prog;
 	struct bpf_link *link = NULL;
 	int trace_pipe_fd;
+	int quiet = argc > 1 && !strcmp(argv[1], "--quiet");
 
 	obj = rex_obj_get_bpf(rex_obj_load(EXE));
 	if (!obj) {
@@ -84,6 +86,17 @@ int main(void)
 	}
 
 	g_stats = bpf_object__find_map_by_name(obj, "STATS");
+
+	if (quiet && g_stats) {
+		/* benchmark mode: tell the extension to skip per-packet logging */
+		uint32_t k = CFG_QUIET;
+		uint64_t v = 1;
+		if (bpf_map__update_elem(g_stats, &k, sizeof(k), &v, sizeof(v),
+					 0))
+			fprintf(stderr, "[loader] failed to set CFG_QUIET\n");
+		else
+			fprintf(stderr, "[loader] quiet (benchmark) mode\n");
+	}
 
 	signal(SIGTERM, on_term);
 	signal(SIGINT, on_term);

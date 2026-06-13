@@ -38,6 +38,7 @@ const STAT_PASSED: u32 = 2; // packets allowed through
 const STAT_DROPPED: u32 = 3; // packets dropped by the filter
 const STAT_ARP: u32 = 4; // ARP packets seen
 const STAT_IPV4: u32 = 5; // IPv4 packets seen
+const CFG_QUIET: u32 = 6; // nonzero -> skip per-packet rex_printk (benchmark mode)
 const STAT_SLOTS: u32 = 8;
 
 #[rex_map]
@@ -92,15 +93,23 @@ fn net_filter(obj: &kprobe, regs: &mut PtRegs) -> Result {
         return Ok(0);
     }
 
+    // Benchmark mode: the loader sets CFG_QUIET to suppress the per-packet
+    // trace log, so measurements capture monitor+control cost, not formatting.
+    let quiet = STATS.get_mut(&CFG_QUIET).is_some_and(|v| *v != 0);
+
     // ── control: per-protocol filtering ───────────────────────────────────
     if proto == ETH_P_ARP {
         bump(STAT_DROPPED, 1);
         obj.bpf_override_return(regs, VERDICT_DROP);
-        rex_printk!("[rex_net] DROP arp  len={}\n", len)?;
+        if !quiet {
+            rex_printk!("[rex_net] DROP arp  len={}\n", len)?;
+        }
     } else {
         bump(STAT_PASSED, 1);
         obj.bpf_override_return(regs, VERDICT_PASS);
-        rex_printk!("[rex_net] PASS proto={:#x} len={}\n", proto, len)?;
+        if !quiet {
+            rex_printk!("[rex_net] PASS proto={:#x} len={}\n", proto, len)?;
+        }
     }
 
     Ok(0)
